@@ -1,6 +1,8 @@
 import express from 'express'
 import fileUpload from 'express-fileupload'
 import { uploadFile, getFiles,downloadFile, getFileURL } from './s3.js'
+//cors
+import cors from 'cors'
 
 const app = express()
 
@@ -8,6 +10,8 @@ app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: './uploads'
 }))
+app.use(cors())
+
 
 app.get('/files', async (req, res) => {
     const result = await getFiles()
@@ -33,6 +37,5 @@ app.post('/files', async (req, res) => {
 })
 
 app.use(express.static('images'))
-
-app.listen(3000)
-console.log(`Server on port ${3000}`)
+app.listen(3001)
+console.log(`Server on port ${3001}`)
