@@ -10,9 +10,10 @@ function App() {
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const toast = useRef(null);
+  const url = "https://aws-node.onrender.com/"
 
   useEffect(() => {
-    axios.get('https://aws-node.onrender.com/files')
+    axios.get(`${url}files`)
       .then(response => {
         console.log(response.data);
         setFiles(response.data);
@@ -23,7 +24,7 @@ function App() {
   }, []);
 
   const getFileURL = async fileName => {
-    const response = await axios.get(`https://aws-node.onrender.com/files/${fileName}`);
+    const response = await axios.get(`${url}files/${fileName}`);
     return response.data.url; // Devuelve la URL del archivo
   };
 
@@ -33,8 +34,10 @@ function App() {
     formData.append('file', file);
 
     try {
-      await axios.post('https://aws-node.onrender.com/files', formData);
-      const response = await axios.get('https://aws-node.onrender.com/files');
+      await axios.post(`${url}files`, formData);
+      const response = await axios.get(`${url}files`);
+      toast.current.show({severity:'success', summary: 'Archivo', detail:'El archivo ha sido subido con exito', life: 3000});
+
       setFiles(response.data);
     } catch (error) {
       console.error('Error al subir el archivo:', error);
@@ -43,7 +46,7 @@ function App() {
 
   const handleDownload = async fileName => {
     try {
-      await axios.get(`https://aws-node.onrender.com/downloadfile/${fileName}`);
+      await axios.get(`${url}downloadfile/${fileName}`);
       console.log('Archivo descargado');
       toast.current.show({severity:'success', summary: 'Descargado', detail:'El archivo ha sido descargado', life: 3000});
     } catch (error) {
